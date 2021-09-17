@@ -1,0 +1,24 @@
+﻿@page "/fetchdata"
+
+@if (logins == null)
+{
+    <div>Loading</div>
+}
+else
+{
+    <table class="table">
+        
+        <tbody>
+            @foreach (var item in logins)
+            {
+                <tr>
+                    <td>@item.TenDangNhap</td>
+                    <td>@item.MatKhau</td>
+                    <td>@item.MaGv</td>
+                    <td>@item.Quyen</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
