@@ -26,4 +26,8 @@
     <ProjectReference Include="..\QuanLyGiangVien.Models\QuanLyGiangVien.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\" />
+  </ItemGroup>
+
 </Project>
