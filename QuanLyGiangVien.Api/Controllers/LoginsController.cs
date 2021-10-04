@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuanLyGiangVien.Api.Data;
+using QuanLyGiangVien.Api.DTO.Auth;
+using QuanLyGiangVien.Api.Service.AuthService;
 using QuanLyGiangVien.Models.Models;
 using System;
 using System.Collections.Generic;
@@ -15,10 +17,12 @@ namespace QuanLyGiangVien.Api.Controllers
     public class LoginsController : ControllerBase
     {
         private readonly QuanLyGiangVienDbContext _context;
+        private readonly IAuthService _authService;
 
-        public LoginsController(QuanLyGiangVienDbContext context)
+        public LoginsController(QuanLyGiangVienDbContext context, IAuthService authService)
         {
             _context = context;
+            _authService = authService;
         }
         // GET: api/TaiKhoans
         [HttpGet]
@@ -28,7 +32,7 @@ namespace QuanLyGiangVien.Api.Controllers
             var listTaiKhoanDto = listFromDB.Select(x => new LoginRequest()
             {
                 TenDangNhap = x.TenDangNhap,
-                MatKhau = x.MatKhau,
+                MatKhau = x.PasswordHash,
                 MaGv = x.MaGv,
                 Quyen = x.Quyen
             });
@@ -36,24 +40,30 @@ namespace QuanLyGiangVien.Api.Controllers
             return listTaiKhoanDto;
         }
 
-        [HttpGet("{tenTaiKhoan}")]
-        public async Task<ActionResult<LoginRequest>> GetTaiKhoanByUser(string tenTaiKhoan)
-        {
-            var taiKhoan = await _context.TaiKhoans.FindAsync(tenTaiKhoan);
-            if (taiKhoan == null)
-            {
-                return BadRequest(tenTaiKhoan);
-            }
-            var taiKhoanDto = new LoginRequest()
-            {
-                MaGv = taiKhoan.MaGv,
-                TenDangNhap = taiKhoan.TenDangNhap,
-                MatKhau = taiKhoan.MatKhau,
-                Quyen = taiKhoan.Quyen,
-            };
+        //[HttpGet("{tenTaiKhoan}")]
+        //public async Task<ActionResult<LoginRequest>> GetTaiKhoanByUser(string tenTaiKhoan)
+        //{
+        //    var taiKhoan = await _context.TaiKhoans.FindAsync(tenTaiKhoan);
+        //    if (taiKhoan == null)
+        //    {
+        //        return BadRequest(tenTaiKhoan);
+        //    }
+        //    var taiKhoanDto = new LoginRequest()
+        //    {
+        //        MaGv = taiKhoan.MaGv,
+        //        TenDangNhap = taiKhoan.TenDangNhap,
+        //        MatKhau = taiKhoan.,
+        //        Quyen = taiKhoan.Quyen,
+        //    };
             
 
-            return taiKhoanDto;
+        //    return taiKhoanDto;
+        //}
+
+        [HttpPost]
+        public async Task<IActionResult> Login(UserLoginDto userLogin)
+        {
+            return Ok(await _authService.Login(userLogin.TenDangNhap, userLogin.Password)); 
         }
     }
 }

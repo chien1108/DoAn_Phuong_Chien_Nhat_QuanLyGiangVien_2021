@@ -1,4 +1,5 @@
-﻿using QuanLyGiangVien.Api.Entities;
+﻿using QuanLyGiangVien.Api.DTO.Auth;
+using QuanLyGiangVien.Api.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ namespace QuanLyGiangVien.Api.Service.AuthService
 {
     public interface IAuthService
     {
-        Task<ServiceResponse<int>> Register(TaiKhoan taikhoan, string password);
+        Task<ServiceResponse<string>> Register(TaiKhoan taikhoan, string password);
         Task<bool> UserExist(string TenDangNhap);
+        Task<ServiceResponse<string>> Login(string tenDangNhap, string password);
     }
 }
